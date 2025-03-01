@@ -37,7 +37,7 @@ bot_template = '''
 user_template = '''
 <div class="chat-message user">
     <div class="avatar">
-        <img src="https://cdn.icon-icons.com/icons2/2468/PNG/512/user_kids_avatar_user_profile_icon_149314.png" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
+        <img src="https://static.vecteezy.com/system/resources/thumbnails/025/463/285/small/motivated-young-asian-man-semi-flat-character-head-optimistic-brunette-editable-cartoon-avatar-icon-face-emotion-colorful-spot-illustration-for-web-graphic-design-animation-vector.jpg" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
     </div>    
     <div class="message">{{MSG}}</div>
 </div>
