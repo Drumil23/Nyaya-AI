@@ -2,13 +2,10 @@ import os
 import streamlit as st  
 from PyPDF2 import PdfReader
 from langchain_text_splitters import CharacterTextSplitter
-import numpy as np
 from dotenv import load_dotenv
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Chroma
 from groq import Groq
 from langchain_core.messages import HumanMessage, AIMessage
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_qdrant import QdrantVectorStore
 from htmlTemplates import css, bot_template, user_template
 
