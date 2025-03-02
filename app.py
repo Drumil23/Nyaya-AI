@@ -87,7 +87,7 @@ def get_response(query, vectorstore=None):
             messages=[
                 {
                     "role": "user",
-                    "content": f"Take a look at the following documents: {docs_string} and do not reply to anything unrelated to the documents. Also return the part, chapter or specific clause that is relevant to the query."
+                    "content": f"Take a look at the following documents: {docs_string} and do not reply to anything unrelated to the documents. Also return the part, chapter or specific clause that is relevant to the query with respect to Bharatiya Nagarik Suraksha Sanhita (BNSS), Bharatiya Nyaya Sanhita (BNS) and Bharatiya Sakshya Adhiniyam (BSA)."
                 },
                 {
                     "role": "user",
@@ -103,7 +103,7 @@ def get_response(query, vectorstore=None):
             messages=[
                 {
                     "role": "user",
-                    "content": f"Take a look at the following query: {query} and do not reply to anything unrelated to Indian law which is based on BNS,BNSS and BSA only. Also return the part, chapter or specific clause that is relevant to the query."
+                    "content": f"Take a look at the following query: {query} and do not reply to anything unrelated to Indian law which is based on Bharatiya Nagarik Suraksha Sanhita (BNSS), Bharatiya Nyaya Sanhita (BNS) and Bharatiya Sakshya Adhiniyam (BSA). Also return the part, chapter or specific clause that is relevant to the query."
                 },
                 {
                     "role": "user",
