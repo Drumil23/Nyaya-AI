@@ -40,52 +40,79 @@ def get_chunks_text(raw_text):
 def get_vectorstore(chunks):
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
     vectorstore = QdrantVectorStore.from_texts(texts=chunks, embedding=embeddings, url=os.getenv("QDRANT_HOST"), api_key=os.getenv("QDRANT_API_KEY"), collection_name="beginning")
-    return vectorstore  
+    return vectorstore
 
-# def get_conversation_chain(query, history, vectorstore):
-#     docs = []
+# def get_default_vectorstore():
+#         vector_db = Qdrant(
+#         collection="BNS",
+#         url=os.getenv("QDRANT_HOST"),
+#         api_key=os.getenv("QDRANT_API_KEY"),
+#         embedder=GeminiEmbedder(dimensions=768),)
+
+#         knowledge_base = PDFUrlKnowledgeBase(
+#         urls=["https://file.notion.so/f/f/362c1af9-a522-4624-b1c8-d53897a332aa/2b8b4f79-316f-4c49-8a82-479ab1548016/Bharatiya_Nyaya_Sanhita_2023.pdf?table=block&id=1a37d635-716e-801b-8e08-c5e011d9630c&spaceId=362c1af9-a522-4624-b1c8-d53897a332aa&expirationTimestamp=1740348000000&signature=AwxfeweDtlexR3QDyz_C6h0IJ0YnLkvrie146CNFFi8&downloadName=Bharatiya_Nyaya_Sanhita%2C_2023.pdf"],
+#         vector_db=vector_db,
+#         embedder=GeminiEmbedder(dimensions=768)
+#     )
+           
+# Multichat-PDF
+# def get_response(query, vectorstore):
+#     docs = vectorstore.similarity_search(query, k=5)
+#     docs_string = ""
+#     for doc in docs:
+#         docs_string += doc.page_content+ "\n"
+#     chat_completion = client.chat.completions.create(
 #     messages=[
 #         {
 #             "role":"user",
-#             "content": f"Take a look at the following documents: {docs_string}"
+#             "content": f"Take a look at the following documents: {docs_string} and do not reply to anything unrelated to the documents. Also return the part, chapter or specific clause that is relevant to the query."
 #         },
 #         {
 #             "role": "user",
 #             "content": f"{query}",
 #         }
-#     ]
-#     messages = history + messages
-#     docs = vectorstore.similarity_search(query, k=5)
-#     docs_string = ""
-#     for doc in docs:
-#         print(doc)
-#         docs_string += doc.page_content+ "\n"
-#     chat_completion = client.chat.completions.create(
-#     messages=messages,
+#     ],
 #     model="llama3-70b-8192",
 #     )
-#     output = chat_completion.choices[0].message.content
-#     return output
+#     return chat_completion.choices[0].message.content
 
-def get_response(query, vectorstore):
-    docs = vectorstore.similarity_search(query, k=5)
-    docs_string = ""
-    for doc in docs:
-        docs_string += doc.page_content+ "\n"
-    chat_completion = client.chat.completions.create(
-    messages=[
-        {
-            "role":"user",
-            "content": f"Take a look at the following documents: {docs_string} and do not reply to anything unrelated to the documents. Also return the part, chapter or specific clause that is relevant to the query."
-        },
-        {
-            "role": "user",
-            "content": f"{query}",
-        }
-    ],
-    model="llama3-70b-8192",
-    )
-    return chat_completion.choices[0].message.content
+#Both 
+def get_response(query, vectorstore=None):
+    if vectorstore:
+        docs = vectorstore.similarity_search(query, k=5)
+        docs_string = ""
+        for doc in docs:
+            docs_string += doc.page_content + "\n"
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Take a look at the following documents: {docs_string} and do not reply to anything unrelated to the documents. Also return the part, chapter or specific clause that is relevant to the query."
+                },
+                {
+                    "role": "user",
+                    "content": f"{query}",
+                }
+            ],
+            model="llama3-70b-8192",
+        )
+        return chat_completion.choices[0].message.content
+    else:
+        # Handle chat without vectorstore
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Take a look at the following query: {query} and do not reply to anything unrelated to Indian law which is based on BNS,BNSS and BSA only. Also return the part, chapter or specific clause that is relevant to the query."
+                },
+                {
+                    "role": "user",
+                    "content": f"{query}",
+                }
+            ],
+            model="llama3-70b-8192",
+        )
+        return chat_completion.choices[0].message.content
 
 # Function to render messages
 def render_message(template, message):
@@ -133,12 +160,8 @@ def main():
     if query is not None and query != "":
         st.session_state.chat_history.append(HumanMessage(query))
         st.markdown(render_message(user_template, query), unsafe_allow_html=True)
-
-        # **Check if vectorstore exists before querying**
-        if st.session_state.vectorstore is None:
-            ai_response = "Please upload and embed documents first before asking queries."
-        else:
-            ai_response = get_response(query, st.session_state.vectorstore)
+        
+        ai_response = get_response(query, st.session_state.vectorstore)
 
         st.markdown(render_message(bot_template, ai_response), unsafe_allow_html=True)
         st.session_state.chat_history.append(AIMessage(ai_response))
