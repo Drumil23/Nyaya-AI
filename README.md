@@ -9,8 +9,8 @@ Nyaya-AI chatbot is a virtual assistant designed to provide legal information an
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/lawgic-ai-chatbot.git
-    cd lawgic-ai-chatbot
+    git clone https://github.com/yourusername/nyaya-ai-chatbot.git
+    cd nyaya-ai-chatbot
     ```
 
 2. Create a virtual environment:
