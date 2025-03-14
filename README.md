@@ -3,7 +3,7 @@
 
 ## Overview
 
-Lawgic AI Chatbot is a virtual assistant designed to provide legal information and assistance. 
+Nyaya-AI Chatbot is a virtual assistant designed to provide legal information and assistance. 
 
 ## Installation
 
