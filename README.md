@@ -1,9 +1,9 @@
 
-# lawgic-ai Chatbot
+# Nyaya-AI Chatbot
 
 ## Overview
 
-Nyaya-AI Chatbot is a virtual assistant designed to provide legal information and assistance. 
+Nyaya-AI chatbot is a virtual assistant designed to provide legal information and assistance. 
 
 ## Installation
 
